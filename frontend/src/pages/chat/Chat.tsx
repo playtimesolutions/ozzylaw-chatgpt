@@ -7,7 +7,6 @@ import remarkGfm from 'remark-gfm'
 import rehypeRaw from "rehype-raw";
 import uuid from 'react-uuid';
 import { isEmpty } from "lodash-es";
-import DOMPurify from 'dompurify';
 
 import styles from "./Chat.module.css";
 import Contoso from "../../assets/Contoso.svg";
@@ -734,7 +733,7 @@ const Chat = () => {
                                 <ReactMarkdown
                                     linkTarget="_blank"
                                     className={styles.citationPanelContent}
-                                    children={DOMPurify.sanitize(activeCitation.content, {ALLOWED_TAGS: XSSAllowTags})}
+                                    children={activeCitation.content}
                                     remarkPlugins={[remarkGfm]}
                                     rehypePlugins={[rehypeRaw]}
                                 />

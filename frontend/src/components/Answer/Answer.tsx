@@ -1,7 +1,6 @@
 import { FormEvent, useEffect, useMemo, useState, useContext } from "react";
 import { useBoolean } from "@fluentui/react-hooks"
 import { Checkbox, DefaultButton, Dialog, FontIcon, Stack, Text } from "@fluentui/react";
-import DOMPurify from 'dompurify';
 import { AppStateContext } from '../../state/AppProvider';
 
 import styles from "./Answer.module.css";
@@ -41,12 +40,12 @@ export const Answer = ({
     const [showReportInappropriateFeedback, setShowReportInappropriateFeedback] = useState(false);
     const [negativeFeedbackList, setNegativeFeedbackList] = useState<Feedback[]>([]);
     const appStateContext = useContext(AppStateContext)
-    const FEEDBACK_ENABLED = appStateContext?.state.frontendSettings?.feedback_enabled; 
-    
+    const FEEDBACK_ENABLED = appStateContext?.state.frontendSettings?.feedback_enabled;
+
     const handleChevronClick = () => {
         setChevronIsExpanded(!chevronIsExpanded);
         toggleIsRefAccordionOpen();
-      };
+    };
 
     useEffect(() => {
         setChevronIsExpanded(isRefAccordionOpen);
@@ -54,7 +53,7 @@ export const Answer = ({
 
     useEffect(() => {
         if (answer.message_id == undefined) return;
-        
+
         let currentFeedbackState;
         if (appStateContext?.state.feedbackState && appStateContext?.state.feedbackState[answer.message_id]) {
             currentFeedbackState = appStateContext?.state.feedbackState[answer.message_id];
@@ -70,7 +69,7 @@ export const Answer = ({
         if (citation.filepath && citation.chunk_id) {
             if (truncate && citation.filepath.length > filePathTruncationLimit) {
                 const citationLength = citation.filepath.length;
-                citationFilename = `${citation.filepath.substring(0, 20)}...${citation.filepath.substring(citationLength -20)} - Part ${parseInt(citation.chunk_id) + 1}`;
+                citationFilename = `${citation.filepath.substring(0, 20)}...${citation.filepath.substring(citationLength - 20)} - Part ${parseInt(citation.chunk_id) + 1}`;
             }
             else {
                 citationFilename = `${citation.filepath} - Part ${parseInt(citation.chunk_id) + 1}`;
@@ -117,7 +116,7 @@ export const Answer = ({
             setFeedbackState(newFeedbackState);
             await historyMessageFeedback(answer.message_id, Feedback.Neutral);
         }
-        appStateContext?.dispatch({ type: 'SET_FEEDBACK_STATE', payload: { answerId: answer.message_id, feedback: newFeedbackState }});
+        appStateContext?.dispatch({ type: 'SET_FEEDBACK_STATE', payload: { answerId: answer.message_id, feedback: newFeedbackState } });
     }
 
     const updateFeedbackList = (ev?: FormEvent<HTMLElement | HTMLInputElement>, checked?: boolean) => {
@@ -149,14 +148,14 @@ export const Answer = ({
     const UnhelpfulFeedbackContent = () => {
         return (<>
             <div>Why wasn't this response helpful?</div>
-            <Stack tokens={{childrenGap: 4}}>
+            <Stack tokens={{ childrenGap: 4 }}>
                 <Checkbox label="Citations are missing" id={Feedback.MissingCitation} defaultChecked={negativeFeedbackList.includes(Feedback.MissingCitation)} onChange={updateFeedbackList}></Checkbox>
                 <Checkbox label="Citations are wrong" id={Feedback.WrongCitation} defaultChecked={negativeFeedbackList.includes(Feedback.WrongCitation)} onChange={updateFeedbackList}></Checkbox>
                 <Checkbox label="The response is not from my data" id={Feedback.OutOfScope} defaultChecked={negativeFeedbackList.includes(Feedback.OutOfScope)} onChange={updateFeedbackList}></Checkbox>
                 <Checkbox label="Inaccurate or irrelevant" id={Feedback.InaccurateOrIrrelevant} defaultChecked={negativeFeedbackList.includes(Feedback.InaccurateOrIrrelevant)} onChange={updateFeedbackList}></Checkbox>
                 <Checkbox label="Other" id={Feedback.OtherUnhelpful} defaultChecked={negativeFeedbackList.includes(Feedback.OtherUnhelpful)} onChange={updateFeedbackList}></Checkbox>
             </Stack>
-            <div onClick={() => setShowReportInappropriateFeedback(true)} style={{ color: "#115EA3", cursor: "pointer"}}>Report inappropriate content</div>
+            <div onClick={() => setShowReportInappropriateFeedback(true)} style={{ color: "#115EA3", cursor: "pointer" }}>Report inappropriate content</div>
         </>);
     }
 
@@ -164,7 +163,7 @@ export const Answer = ({
         return (
             <>
                 <div>The content is <span style={{ color: "red" }} >*</span></div>
-                <Stack tokens={{childrenGap: 4}}>
+                <Stack tokens={{ childrenGap: 4 }}>
                     <Checkbox label="Hate speech, stereotyping, demeaning" id={Feedback.HateSpeech} defaultChecked={negativeFeedbackList.includes(Feedback.HateSpeech)} onChange={updateFeedbackList}></Checkbox>
                     <Checkbox label="Violent: glorification of violence, self-harm" id={Feedback.Violent} defaultChecked={negativeFeedbackList.includes(Feedback.Violent)} onChange={updateFeedbackList}></Checkbox>
                     <Checkbox label="Sexual: explicit content, grooming" id={Feedback.Sexual} defaultChecked={negativeFeedbackList.includes(Feedback.Sexual)} onChange={updateFeedbackList}></Checkbox>
@@ -178,14 +177,14 @@ export const Answer = ({
     return (
         <>
             <Stack className={styles.answerContainer} tabIndex={0}>
-                
+
                 <Stack.Item>
                     <Stack horizontal grow>
                         <Stack.Item grow>
                             <ReactMarkdown
                                 linkTarget="_blank"
                                 remarkPlugins={[remarkGfm, supersub]}
-                                children={DOMPurify.sanitize(parsedAnswer.markdownFormatText, {ALLOWED_TAGS: XSSAllowTags})}
+                                children={parsedAnswer.markdownFormatText}
                                 className={styles.answerText}
                             />
                         </Stack.Item>
@@ -195,61 +194,61 @@ export const Answer = ({
                                     aria-hidden="false"
                                     aria-label="Like this response"
                                     onClick={() => onLikeResponseClicked()}
-                                    style={feedbackState === Feedback.Positive || appStateContext?.state.feedbackState[answer.message_id] === Feedback.Positive ? 
-                                        { color: "darkgreen", cursor: "pointer" } : 
+                                    style={feedbackState === Feedback.Positive || appStateContext?.state.feedbackState[answer.message_id] === Feedback.Positive ?
+                                        { color: "darkgreen", cursor: "pointer" } :
                                         { color: "slategray", cursor: "pointer" }}
                                 />
                                 <ThumbDislike20Filled
                                     aria-hidden="false"
                                     aria-label="Dislike this response"
                                     onClick={() => onDislikeResponseClicked()}
-                                    style={(feedbackState !== Feedback.Positive && feedbackState !== Feedback.Neutral && feedbackState !== undefined) ? 
-                                        { color: "darkred", cursor: "pointer" } : 
+                                    style={(feedbackState !== Feedback.Positive && feedbackState !== Feedback.Neutral && feedbackState !== undefined) ?
+                                        { color: "darkred", cursor: "pointer" } :
                                         { color: "slategray", cursor: "pointer" }}
                                 />
                             </Stack>}
                         </Stack.Item>
                     </Stack>
-                    
+
                 </Stack.Item>
                 <Stack horizontal className={styles.answerFooter}>
-                {!!parsedAnswer.citations.length && (
-                    <Stack.Item
-                        onKeyDown={e => e.key === "Enter" || e.key === " " ? toggleIsRefAccordionOpen() : null}
-                    >
-                        <Stack style={{width: "100%"}} >
-                            <Stack horizontal horizontalAlign='start' verticalAlign='center'>
-                                <Text
-                                    className={styles.accordionTitle}
-                                    onClick={toggleIsRefAccordionOpen}
-                                    aria-label="Open references"
-                                    tabIndex={0}
-                                    role="button"
-                                >
-                                <span>{parsedAnswer.citations.length > 1 ? parsedAnswer.citations.length + " references" : "1 reference"}</span>
-                                </Text>
-                                <FontIcon className={styles.accordionIcon}
-                                onClick={handleChevronClick} iconName={chevronIsExpanded ? 'ChevronDown' : 'ChevronRight'}
-                                />
+                    {!!parsedAnswer.citations.length && (
+                        <Stack.Item
+                            onKeyDown={e => e.key === "Enter" || e.key === " " ? toggleIsRefAccordionOpen() : null}
+                        >
+                            <Stack style={{ width: "100%" }} >
+                                <Stack horizontal horizontalAlign='start' verticalAlign='center'>
+                                    <Text
+                                        className={styles.accordionTitle}
+                                        onClick={toggleIsRefAccordionOpen}
+                                        aria-label="Open references"
+                                        tabIndex={0}
+                                        role="button"
+                                    >
+                                        <span>{parsedAnswer.citations.length > 1 ? parsedAnswer.citations.length + " references" : "1 reference"}</span>
+                                    </Text>
+                                    <FontIcon className={styles.accordionIcon}
+                                        onClick={handleChevronClick} iconName={chevronIsExpanded ? 'ChevronDown' : 'ChevronRight'}
+                                    />
+                                </Stack>
+
                             </Stack>
-                            
-                        </Stack>
+                        </Stack.Item>
+                    )}
+                    <Stack.Item className={styles.answerDisclaimerContainer}>
+                        <span className={styles.answerDisclaimer}>AI-generated content may be incorrect</span>
                     </Stack.Item>
-                )}
-                <Stack.Item className={styles.answerDisclaimerContainer}>
-                    <span className={styles.answerDisclaimer}>AI-generated content may be incorrect</span>
-                </Stack.Item>
                 </Stack>
-                {chevronIsExpanded && 
+                {chevronIsExpanded &&
                     <div style={{ marginTop: 8, display: "flex", flexFlow: "wrap column", maxHeight: "150px", gap: "4px" }}>
                         {parsedAnswer.citations.map((citation, idx) => {
                             return (
-                                <span 
-                                    title={createCitationFilepath(citation, ++idx)} 
-                                    tabIndex={0} 
-                                    role="link" 
-                                    key={idx} 
-                                    onClick={() => onCitationClicked(citation)} 
+                                <span
+                                    title={createCitationFilepath(citation, ++idx)}
+                                    tabIndex={0}
+                                    role="link"
+                                    key={idx}
+                                    onClick={() => onCitationClicked(citation)}
                                     onKeyDown={e => e.key === "Enter" || e.key === " " ? onCitationClicked(citation) : null}
                                     className={styles.citationContainer}
                                     aria-label={createCitationFilepath(citation, idx)}
@@ -261,42 +260,42 @@ export const Answer = ({
                     </div>
                 }
             </Stack>
-            <Dialog 
+            <Dialog
                 onDismiss={() => {
                     resetFeedbackDialog();
                     setFeedbackState(Feedback.Neutral);
                 }}
                 hidden={!isFeedbackDialogOpen}
                 styles={{
-                    
+
                     main: [{
                         selectors: {
-                          ['@media (min-width: 480px)']: {
-                            maxWidth: '600px',
-                            background: "#FFFFFF",
-                            boxShadow: "0px 14px 28.8px rgba(0, 0, 0, 0.24), 0px 0px 8px rgba(0, 0, 0, 0.2)",
-                            borderRadius: "8px",
-                            maxHeight: '600px',
-                            minHeight: '100px',
-                          }
+                            ['@media (min-width: 480px)']: {
+                                maxWidth: '600px',
+                                background: "#FFFFFF",
+                                boxShadow: "0px 14px 28.8px rgba(0, 0, 0, 0.24), 0px 0px 8px rgba(0, 0, 0, 0.2)",
+                                borderRadius: "8px",
+                                maxHeight: '600px',
+                                minHeight: '100px',
+                            }
                         }
-                      }]
+                    }]
                 }}
                 dialogContentProps={{
                     title: "Submit Feedback",
                     showCloseButton: true
                 }}
             >
-                <Stack tokens={{childrenGap: 4}}>
+                <Stack tokens={{ childrenGap: 4 }}>
                     <div>Your feedback will improve this experience.</div>
-                    
-                    {!showReportInappropriateFeedback ? <UnhelpfulFeedbackContent/> : <ReportInappropriateFeedbackContent/>}
-                    
+
+                    {!showReportInappropriateFeedback ? <UnhelpfulFeedbackContent /> : <ReportInappropriateFeedbackContent />}
+
                     <div>By pressing submit, your feedback will be visible to the application owner.</div>
-                    
+
                     <DefaultButton disabled={negativeFeedbackList.length < 1} onClick={onSubmitNegativeFeedback}>Submit</DefaultButton>
                 </Stack>
-                
+
             </Dialog>
         </>
     );
