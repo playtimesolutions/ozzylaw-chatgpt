@@ -9,7 +9,7 @@ import uuid from 'react-uuid';
 import { isEmpty } from "lodash-es";
 
 import styles from "./Chat.module.css";
-import Contoso from "../../assets/Contoso.svg";
+import OzzyLaw from "../../assets/OzzyLaw.svg";
 import { XSSAllowTags } from "../../constants/xssAllowTags";
 
 import {
@@ -587,7 +587,7 @@ const Chat = () => {
                         {!messages || messages.length < 1 ? (
                             <Stack className={styles.chatEmptyState}>
                                 <img
-                                    src={Contoso}
+                                    src={OzzyLaw}
                                     className={styles.chatIcon}
                                     aria-hidden="true"
                                 />
