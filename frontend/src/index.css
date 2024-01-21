@@ -10,7 +10,7 @@ body {
 }
 
 html {
-  background: #e3a587; /* Earthy tone for the Australian outback */
+  background: #f2f2f2;
   font-family: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI",
     -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -19,9 +19,4 @@ html {
 
 #root {
   height: 100%;
-  background: linear-gradient(
-    to bottom,
-    #0091ad 0%,
-    #00688b 100%
-  ); /* Gradient from ocean blue to deeper sea blue */
 }
