@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect, useContext, useLayoutEffect } from "react";
-import { CommandBarButton, IconButton, Dialog, DialogType, Stack } from "@fluentui/react";
+import { CommandBarButton, IconButton, Dialog, DialogType, Stack, Text } from "@fluentui/react";
 import { SquareRegular, ShieldLockRegular, ErrorCircleRegular } from "@fluentui/react-icons";
 
 import ReactMarkdown from "react-markdown";
@@ -585,6 +585,9 @@ const Chat = () => {
                                 />
                                 <h1 className={styles.chatEmptyStateTitle}>Your Ozzy Legal Copilot</h1>
                                 <h2 className={styles.chatEmptyStateSubtitle}>Ask anything about Australian law and get instant answers and references.</h2>
+                                <p className="smallText">
+                                    Developed by <a href="https://playtimesolutions.com.au">Playtime Solutions</a> for research and demo purposes.
+                                </p>
                             </Stack>
                         ) : (
                             <div className={styles.chatMessageStream} style={{ marginBottom: isLoading ? "40px" : "0px" }} role="log">
