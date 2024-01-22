@@ -79,7 +79,7 @@ export const Answer = ({
             citationFilename = `${citation.filepath} - Part ${citation.reindex_id}`;
         }
         else {
-            citationFilename = `Citation ${index}`;
+            citationFilename = `Citation: ${citation.title}`;
         }
         return citationFilename;
     }
