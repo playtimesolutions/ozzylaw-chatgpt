@@ -544,9 +544,12 @@ const Chat = () => {
     };
 
     const onViewSource = (citation: Citation) => {
-        const baseUrl = "https://saozzylawaue01.blob.core.windows.net/laws/cases/act/ACAT/2024/";
-        const url = baseUrl + citation.title;
-        window.open(url, "_blank");
+        if (citation.title) {
+            const titleParts = citation.title.split('-');
+            const baseUrl = `https://saozzylawaue01.blob.core.windows.net/laws/${titleParts[1]}/${titleParts[2]}/${titleParts[3]}/${titleParts[4]}/`;
+            const url = baseUrl + citation.title;
+            window.open(url, "_blank");
+        }
     };
 
     const parseCitationFromMessage = (message: ChatMessage) => {
