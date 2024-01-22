@@ -544,9 +544,9 @@ const Chat = () => {
     };
 
     const onViewSource = (citation: Citation) => {
-        if (citation.url && !citation.url.includes("blob.core")) {
-            window.open(citation.url, "_blank");
-        }
+        const baseUrl = "https://saozzylawaue01.blob.core.windows.net/laws/cases/act/ACAT/2024/";
+        const url = baseUrl + citation.title;
+        window.open(url, "_blank");
     };
 
     const parseCitationFromMessage = (message: ChatMessage) => {
