@@ -72,17 +72,6 @@ const Chat = () => {
 
     const [ASSISTANT, TOOL, ERROR] = ["assistant", "tool", "error"]
 
-    useEffect(() => {
-        if (appStateContext?.state.isCosmosDBAvailable?.status === CosmosDBStatus.NotWorking && appStateContext.state.chatHistoryLoadingState === ChatHistoryLoadingState.Fail && hideErrorDialog) {
-            let subtitle = `${appStateContext.state.isCosmosDBAvailable.status}. Please contact the site administrator.`
-            setErrorMsg({
-                title: "Chat history is not enabled",
-                subtitle: subtitle
-            })
-            toggleErrorDialog();
-        }
-    }, [appStateContext?.state.isCosmosDBAvailable]);
-
     const handleErrorDialogClose = () => {
         toggleErrorDialog()
         setTimeout(() => {
@@ -546,7 +535,7 @@ const Chat = () => {
     const onViewSource = (citation: Citation) => {
         if (citation.title) {
             const titleParts = citation.title.split('-');
-            const baseUrl = `https://saozzylawaue01.blob.core.windows.net/laws/${titleParts[1]}/${titleParts[2]}/${titleParts[3]}/${titleParts[4]}/`;
+            const baseUrl = `https://saozzylawaue01.blob.core.windows.net/laws/${titleParts[1]}/${titleParts[2]}/${titleParts[3]}/`;
             const url = baseUrl + citation.title;
             window.open(url, "_blank");
         }
@@ -731,7 +720,7 @@ const Chat = () => {
                                 <span aria-label="Citations" className={styles.citationPanelHeader}>Citations</span>
                                 <IconButton iconProps={{ iconName: 'Cancel' }} aria-label="Close citations panel" onClick={() => setIsCitationPanelOpen(false)} />
                             </Stack>
-                            <h5 className={styles.citationPanelTitle} tabIndex={0} title={activeCitation.url && !activeCitation.url.includes("blob.core") ? activeCitation.url : activeCitation.title ?? ""} onClick={() => onViewSource(activeCitation)}>{activeCitation.title}</h5>
+                            <h5 className={styles.citationPanelTitle} tabIndex={0} title={activeCitation.url ? activeCitation.url : activeCitation.title ?? ""} onClick={() => onViewSource(activeCitation)}>{activeCitation.title}</h5>
                             <div tabIndex={0}>
                                 <ReactMarkdown
                                     linkTarget="_blank"
