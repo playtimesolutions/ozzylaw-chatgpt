@@ -29,10 +29,6 @@ const Layout = () => {
         setCopyClicked(true);
     };
 
-    const handleHistoryClick = () => {
-        appStateContext?.dispatch({ type: 'TOGGLE_CHAT_HISTORY' })
-    };
-
     useEffect(() => {
         if (copyClicked) {
             setCopyText("Copied URL");

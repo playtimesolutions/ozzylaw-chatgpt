@@ -135,13 +135,6 @@ if AZURE_COSMOSDB_DATABASE and AZURE_COSMOSDB_ACCOUNT and AZURE_COSMOSDB_CONVERS
         else:
             credential = AZURE_COSMOSDB_ACCOUNT_KEY
 
-        cosmos_conversation_client = CosmosConversationClient(
-            cosmosdb_endpoint=cosmos_endpoint, 
-            credential=credential, 
-            database_name=AZURE_COSMOSDB_DATABASE,
-            container_name=AZURE_COSMOSDB_CONVERSATIONS_CONTAINER,
-            enable_message_feedback = AZURE_COSMOSDB_ENABLE_FEEDBACK
-        )
     except Exception as e:
         logging.exception("Exception in CosmosDB initialization", e)
         cosmos_conversation_client = None
